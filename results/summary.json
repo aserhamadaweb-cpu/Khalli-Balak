@@ -1,0 +1,130 @@
+{
+  "random_seed": 42,
+  "english_train_size": 4460,
+  "english_test_size": 1114,
+  "egypt_test_size": 40,
+  "english_metrics": [
+    {
+      "precision_spam": 0.0,
+      "recall_spam": 0.0,
+      "model": "baseline",
+      "n_test": 1114
+    },
+    {
+      "precision_spam": 0.9391891891891891,
+      "recall_spam": 0.9328859060402684,
+      "model": "model1_tfidf",
+      "n_test": 1114
+    },
+    {
+      "precision_spam": 0.874251497005988,
+      "recall_spam": 0.9798657718120806,
+      "model": "model2_embed",
+      "n_test": 1114
+    }
+  ],
+  "egypt_metrics": [
+    {
+      "model": "baseline",
+      "script": "arabic",
+      "scams_total": 8,
+      "scams_caught": 0,
+      "safe_total": 6,
+      "false_alarms": 0
+    },
+    {
+      "model": "baseline",
+      "script": "english",
+      "scams_total": 4,
+      "scams_caught": 0,
+      "safe_total": 6,
+      "false_alarms": 0
+    },
+    {
+      "model": "baseline",
+      "script": "franco",
+      "scams_total": 8,
+      "scams_caught": 0,
+      "safe_total": 8,
+      "false_alarms": 0
+    },
+    {
+      "model": "baseline",
+      "script": "ALL",
+      "scams_total": 20,
+      "scams_caught": 0,
+      "safe_total": 20,
+      "false_alarms": 0
+    },
+    {
+      "model": "model1_tfidf",
+      "script": "arabic",
+      "scams_total": 8,
+      "scams_caught": 2,
+      "safe_total": 6,
+      "false_alarms": 1
+    },
+    {
+      "model": "model1_tfidf",
+      "script": "english",
+      "scams_total": 4,
+      "scams_caught": 1,
+      "safe_total": 6,
+      "false_alarms": 2
+    },
+    {
+      "model": "model1_tfidf",
+      "script": "franco",
+      "scams_total": 8,
+      "scams_caught": 2,
+      "safe_total": 8,
+      "false_alarms": 2
+    },
+    {
+      "model": "model1_tfidf",
+      "script": "ALL",
+      "scams_total": 20,
+      "scams_caught": 5,
+      "safe_total": 20,
+      "false_alarms": 5
+    },
+    {
+      "model": "model2_embed",
+      "script": "arabic",
+      "scams_total": 8,
+      "scams_caught": 6,
+      "safe_total": 6,
+      "false_alarms": 2
+    },
+    {
+      "model": "model2_embed",
+      "script": "english",
+      "scams_total": 4,
+      "scams_caught": 4,
+      "safe_total": 6,
+      "false_alarms": 3
+    },
+    {
+      "model": "model2_embed",
+      "script": "franco",
+      "scams_total": 8,
+      "scams_caught": 5,
+      "safe_total": 8,
+      "false_alarms": 1
+    },
+    {
+      "model": "model2_embed",
+      "script": "ALL",
+      "scams_total": 20,
+      "scams_caught": 15,
+      "safe_total": 20,
+      "false_alarms": 6
+    }
+  ],
+  "notes": [
+    "Egyptian messages were never used for training.",
+    "Baseline always predicts SAFE (not spam).",
+    "Logistic regression and TF-IDF are implemented in NumPy/Torch (same idea as scikit-learn) so the project runs on machines where Windows Smart App Control blocks scipy/sklearn DLLs.",
+    "Report numbers honestly; weak Arabic transfer is an expected finding."
+  ]
+}

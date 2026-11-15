@@ -1,0 +1,39 @@
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.eggs/
+dist/
+build/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# IDE / OS
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Hugging Face / model caches (large downloads)
+.cache/
+*.pt
+*.bin
+*.safetensors
+
+# Local secrets (none expected, but safe)
+.env
+.env.*
+
+# Cached English download (re-fetched by train.py)
+data/sms_spam_english.csv
+data/*.zip
+
+# Keep trained artifacts and results in git for the demo
+# models/ and results/ are intentionally NOT ignored

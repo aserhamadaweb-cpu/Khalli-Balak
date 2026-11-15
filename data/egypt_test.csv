@@ -1,0 +1,41 @@
+text,label,script
+"فودافون كاش: حسابك هيتحظر خلال ساعة. ابعت رقم البطاقة والـ PIN على الرابط http://vf-cash-secure.example/verify عشان تفتحه تاني",1,arabic
+"انستاباي: عملية تحويل 4500 ج معلقة. أكّد هويتك دلوقتي من http://instapay-eg.example/login وإلا هتتلغي",1,arabic
+"البنك الأهلي: تم رصد دخول مشبوه على حسابك. اتصل فوراً على 01200000000 وأكد الرقم السري عشان نوقف العملية",1,arabic
+"مبروك! كسبت 10000 ج من سحب فودافون. ادفع رسوم 50 ج على فودافون كاش 01000000000 عشان تستلم الجائزة",1,arabic
+"رسالة عاجلة من انستاباي: حد حاول يسحب فلوسك. ابعت كود الـ OTP اللي وصلك هنا عشان نأمّن المحفظة",1,arabic
+"خدمة عملاء فودافون كاش: عشان نزود حد التحويل ابعت صورة البطاقة ورقم السري للمحفظة على واتساب 01100000000",1,arabic
+"تنبيه أمني: محفظتك هتتقفل النهاردة. افتح الرابط وسجّل دخولك فوراً http://wallet-eg-alert.example",1,arabic
+"تحويل فوري مطلوب: ابنك محتاج 2000 ج علاج. ابعت فودافون كاش على 01211111111 دلوقتي",1,arabic
+Vodafone Cash: Your wallet will be locked in 30 mins. Confirm PIN at http://vf-cash-fix.example now,1,english
+InstaPay ALERT: Transfer of 3200 EGP pending. Verify identity at http://insta-secure.example or it will cancel,1,english
+"Bank SMS: Suspicious login detected. Call 01200000000 and share your OTP to stop the withdrawal",1,english
+"Congrats! You won 5000 EGP Vodafone Cash. Pay 40 EGP fee to 01000000000 to claim prize",1,english
+"VF Cash: 3ady 3la link da 3ashan tefawet el 7esab: http://vf-cash-eg.example/unlock w eb3at el PIN",1,franco
+"InstaPay: 7awel 7asal 2800g ma3ala2. akked el OTP 3ala http://instapay-fix.example aw hatetlaghy",1,franco
+"Bank: do5ool mesh tabee3y. etsel 01200000000 w eb3at el password beta3 el mobile banking",1,franco
+"Mabrook! kesebt 8000g Vodafone Cash. edfa3 60g fees 3ala 01000000000 3ashan testellem",1,franco
+"Khedmet 3omalaa: 3ashan nerfa3 el had, eb3at soura el beta2a w PIN el wallet 3ala WhatsApp 01100000000",1,franco
+"3agel: el wallet hatet2afel. efata7 el link w login: http://eg-wallet-alert.example",1,franco
+"Ya baba el 3arabeya 3atalet, eb3atly 1500g Vodafone Cash 3ala 01222222222 3ashan el wrsha",1,franco
+"InstaPay support: eb3at el code elly wasalak 3ashan ne2afel 3amaleya mashboha",1,franco
+"فودافون كاش: تم استلام 250 ج من أحمد. الرصيد الحالي 1,140 ج",0,arabic
+"انستاباي: تم تحويل 500 ج إلى محمد بنجاح. رقم العملية 998877",0,arabic
+"البنك: تم خصم 120 ج من بطاقتك لدى سوبر ماركت العبور بتاريخ اليوم",0,arabic
+"تذكير: فاتورة الكهرباء 185 ج مستحقة خلال 5 أيام. ادفع من التطبيق الرسمي",0,arabic
+"تمام يا ماما وصلت البيت. هتصل بيكي بعد شوية",0,arabic
+"ميعاد الدكتور بكرة الساعة 5. متنساش البطاقة",0,arabic
+Vodafone Cash: You received 100 EGP from Sara. New balance 640 EGP,0,english
+InstaPay: Transfer of 200 EGP to Karim completed. Ref 445566,0,english
+"Bank: Purchase of 75 EGP at Cairo Metro approved on your debit card",0,english
+"Reminder: your mobile bill is 90 EGP. Pay in the official app before the 20th",0,english
+"Hi dad, school finished early today. Can you pick me up at 2?",0,english
+"Meeting moved to 4pm. See you at the cafe near campus.",0,english
+"VF Cash: estalamt 80g men Omar. el balance el gedeed 520g",0,franco
+"InstaPay: 7awelt 150g le Nour. 3amaliya tamam. ref 112233",0,franco
+"Bank: eshtara 45g men bakery el naharda 3ala el beta2a",0,franco
+"Ya mama ana fel tari2, hasel ba3d 20 de2i2a",0,franco
+"El training bokra 6pm, matensaash el laptop",0,franco
+"Fatoret el internet 110g. edfa3ha men el app el rasmy",0,franco
+"Ok gamed, neshof ba3d el school 3and el club",0,franco
+"Rasheed: el delivery wasal. shokran!",0,franco

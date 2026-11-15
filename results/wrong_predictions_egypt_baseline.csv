@@ -1,0 +1,21 @@
+﻿text,true_label,pred_label,prob_spam,script
+فودافون كاش: حسابك هيتحظر خلال ساعة. ابعت رقم البطاقة والـ PIN على الرابط http://vf-cash-secure.example/verify عشان تفتحه تاني,1,0,0.0,arabic
+انستاباي: عملية تحويل 4500 ج معلقة. أكّد هويتك دلوقتي من http://instapay-eg.example/login وإلا هتتلغي,1,0,0.0,arabic
+البنك الأهلي: تم رصد دخول مشبوه على حسابك. اتصل فوراً على 01200000000 وأكد الرقم السري عشان نوقف العملية,1,0,0.0,arabic
+مبروك! كسبت 10000 ج من سحب فودافون. ادفع رسوم 50 ج على فودافون كاش 01000000000 عشان تستلم الجائزة,1,0,0.0,arabic
+رسالة عاجلة من انستاباي: حد حاول يسحب فلوسك. ابعت كود الـ OTP اللي وصلك هنا عشان نأمّن المحفظة,1,0,0.0,arabic
+خدمة عملاء فودافون كاش: عشان نزود حد التحويل ابعت صورة البطاقة ورقم السري للمحفظة على واتساب 01100000000,1,0,0.0,arabic
+تنبيه أمني: محفظتك هتتقفل النهاردة. افتح الرابط وسجّل دخولك فوراً http://wallet-eg-alert.example,1,0,0.0,arabic
+تحويل فوري مطلوب: ابنك محتاج 2000 ج علاج. ابعت فودافون كاش على 01211111111 دلوقتي,1,0,0.0,arabic
+Vodafone Cash: Your wallet will be locked in 30 mins. Confirm PIN at http://vf-cash-fix.example now,1,0,0.0,english
+InstaPay ALERT: Transfer of 3200 EGP pending. Verify identity at http://insta-secure.example or it will cancel,1,0,0.0,english
+Bank SMS: Suspicious login detected. Call 01200000000 and share your OTP to stop the withdrawal,1,0,0.0,english
+Congrats! You won 5000 EGP Vodafone Cash. Pay 40 EGP fee to 01000000000 to claim prize,1,0,0.0,english
+VF Cash: 3ady 3la link da 3ashan tefawet el 7esab: http://vf-cash-eg.example/unlock w eb3at el PIN,1,0,0.0,franco
+InstaPay: 7awel 7asal 2800g ma3ala2. akked el OTP 3ala http://instapay-fix.example aw hatetlaghy,1,0,0.0,franco
+Bank: do5ool mesh tabee3y. etsel 01200000000 w eb3at el password beta3 el mobile banking,1,0,0.0,franco
+Mabrook! kesebt 8000g Vodafone Cash. edfa3 60g fees 3ala 01000000000 3ashan testellem,1,0,0.0,franco
+"Khedmet 3omalaa: 3ashan nerfa3 el had, eb3at soura el beta2a w PIN el wallet 3ala WhatsApp 01100000000",1,0,0.0,franco
+3agel: el wallet hatet2afel. efata7 el link w login: http://eg-wallet-alert.example,1,0,0.0,franco
+"Ya baba el 3arabeya 3atalet, eb3atly 1500g Vodafone Cash 3ala 01222222222 3ashan el wrsha",1,0,0.0,franco
+InstaPay support: eb3at el code elly wasalak 3ashan ne2afel 3amaleya mashboha,1,0,0.0,franco

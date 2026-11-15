@@ -1,0 +1,13 @@
+﻿model,script,scams_total,scams_caught,safe_total,false_alarms
+baseline,arabic,8,0,6,0
+baseline,english,4,0,6,0
+baseline,franco,8,0,8,0
+baseline,ALL,20,0,20,0
+model1_tfidf,arabic,8,2,6,1
+model1_tfidf,english,4,1,6,2
+model1_tfidf,franco,8,2,8,2
+model1_tfidf,ALL,20,5,20,5
+model2_embed,arabic,8,6,6,2
+model2_embed,english,4,4,6,3
+model2_embed,franco,8,5,8,1
+model2_embed,ALL,20,15,20,6

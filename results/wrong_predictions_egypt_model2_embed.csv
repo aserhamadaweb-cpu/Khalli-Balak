@@ -1,0 +1,12 @@
+﻿text,true_label,pred_label,prob_spam,script
+انستاباي: عملية تحويل 4500 ج معلقة. أكّد هويتك دلوقتي من http://instapay-eg.example/login وإلا هتتلغي,1,0,0.4540749490261078,arabic
+تحويل فوري مطلوب: ابنك محتاج 2000 ج علاج. ابعت فودافون كاش على 01211111111 دلوقتي,1,0,0.0519975945353508,arabic
+InstaPay: 7awel 7asal 2800g ma3ala2. akked el OTP 3ala http://instapay-fix.example aw hatetlaghy,1,0,0.2906757593154907,franco
+"Khedmet 3omalaa: 3ashan nerfa3 el had, eb3at soura el beta2a w PIN el wallet 3ala WhatsApp 01100000000",1,0,0.28694698214530945,franco
+InstaPay support: eb3at el code elly wasalak 3ashan ne2afel 3amaleya mashboha,1,0,0.343669056892395,franco
+انستاباي: تم تحويل 500 ج إلى محمد بنجاح. رقم العملية 998877,0,1,0.555724561214447,arabic
+البنك: تم خصم 120 ج من بطاقتك لدى سوبر ماركت العبور بتاريخ اليوم,0,1,0.7070193886756897,arabic
+Vodafone Cash: You received 100 EGP from Sara. New balance 640 EGP,0,1,0.9422087669372559,english
+Bank: Purchase of 75 EGP at Cairo Metro approved on your debit card,0,1,0.6102009415626526,english
+Reminder: your mobile bill is 90 EGP. Pay in the official app before the 20th,0,1,0.9107183814048767,english
+Fatoret el internet 110g. edfa3ha men el app el rasmy,0,1,0.8038182854652405,franco

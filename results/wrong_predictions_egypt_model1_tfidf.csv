@@ -1,0 +1,21 @@
+﻿text,true_label,pred_label,prob_spam,script
+فودافون كاش: حسابك هيتحظر خلال ساعة. ابعت رقم البطاقة والـ PIN على الرابط http://vf-cash-secure.example/verify عشان تفتحه تاني,1,0,0.24890144169330597,arabic
+البنك الأهلي: تم رصد دخول مشبوه على حسابك. اتصل فوراً على 01200000000 وأكد الرقم السري عشان نوقف العملية,1,0,0.1630002111196518,arabic
+مبروك! كسبت 10000 ج من سحب فودافون. ادفع رسوم 50 ج على فودافون كاش 01000000000 عشان تستلم الجائزة,1,0,0.44680026173591614,arabic
+رسالة عاجلة من انستاباي: حد حاول يسحب فلوسك. ابعت كود الـ OTP اللي وصلك هنا عشان نأمّن المحفظة,1,0,0.1630002111196518,arabic
+خدمة عملاء فودافون كاش: عشان نزود حد التحويل ابعت صورة البطاقة ورقم السري للمحفظة على واتساب 01100000000,1,0,0.1630002111196518,arabic
+تحويل فوري مطلوب: ابنك محتاج 2000 ج علاج. ابعت فودافون كاش على 01211111111 دلوقتي,1,0,0.3655032515525818,arabic
+Vodafone Cash: Your wallet will be locked in 30 mins. Confirm PIN at http://vf-cash-fix.example now,1,0,0.40565210580825806,english
+InstaPay ALERT: Transfer of 3200 EGP pending. Verify identity at http://insta-secure.example or it will cancel,1,0,0.3055679202079773,english
+Bank SMS: Suspicious login detected. Call 01200000000 and share your OTP to stop the withdrawal,1,0,0.36088746786117554,english
+VF Cash: 3ady 3la link da 3ashan tefawet el 7esab: http://vf-cash-eg.example/unlock w eb3at el PIN,1,0,0.3311467170715332,franco
+InstaPay: 7awel 7asal 2800g ma3ala2. akked el OTP 3ala http://instapay-fix.example aw hatetlaghy,1,0,0.15516293048858643,franco
+Bank: do5ool mesh tabee3y. etsel 01200000000 w eb3at el password beta3 el mobile banking,1,0,0.1906246840953827,franco
+Mabrook! kesebt 8000g Vodafone Cash. edfa3 60g fees 3ala 01000000000 3ashan testellem,1,0,0.2730996012687683,franco
+"Khedmet 3omalaa: 3ashan nerfa3 el had, eb3at soura el beta2a w PIN el wallet 3ala WhatsApp 01100000000",1,0,0.015918772667646408,franco
+"Ya baba el 3arabeya 3atalet, eb3atly 1500g Vodafone Cash 3ala 01222222222 3ashan el wrsha",1,0,0.3519921600818634,franco
+"فودافون كاش: تم استلام 250 ج من أحمد. الرصيد الحالي 1,140 ج",0,1,0.5749290585517883,arabic
+Vodafone Cash: You received 100 EGP from Sara. New balance 640 EGP,0,1,0.8827677965164185,english
+Reminder: your mobile bill is 90 EGP. Pay in the official app before the 20th,0,1,0.6026356816291809,english
+VF Cash: estalamt 80g men Omar. el balance el gedeed 520g,0,1,0.5623011589050293,franco
+InstaPay: 7awelt 150g le Nour. 3amaliya tamam. ref 112233,0,1,0.5609376430511475,franco
