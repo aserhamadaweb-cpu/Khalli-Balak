@@ -3,6 +3,9 @@
 venv/
 env/
 
+# Gradio local cache
+.gradio/
+
 # Python
 __pycache__/
 *.py[cod]
