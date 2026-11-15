@@ -57,7 +57,9 @@ def run() -> None:
     )
 
     spam_train_texts = [t for t, y in zip(x_train, y_train) if int(y) == 1]
-    save_spam_corpus(spam_train_texts, MODELS_DIR / "spam_corpus.json")
+    # Keep a compact explanation corpus for the demo (speed + repo size).
+    spam_for_demo = spam_train_texts[:80]
+    save_spam_corpus(spam_for_demo, MODELS_DIR / "spam_corpus.json")
 
     models = [
         AlwaysSafeBaseline(),

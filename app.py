@@ -40,17 +40,18 @@ def load_artifacts() -> None:
             f"Missing {SPAM_CORPUS_PATH}. Run `python train.py` first."
         )
 
-    print("Loading Model 2...")
+    print("Loading Model 2...", flush=True)
     _model = EmbeddingLogRegModel.load(MODEL_PATH)
     _model._ensure_encoder()
 
-    print("Loading spam corpus for explanations...")
+    print("Loading spam corpus for explanations...", flush=True)
     _spam_texts = load_spam_corpus(SPAM_CORPUS_PATH)
-    # Cap neighbor search for demo speed (still representative).
-    if len(_spam_texts) > 400:
-        _spam_texts = _spam_texts[:400]
-    _spam_embeddings = _model.encode(_spam_texts)
-    print("Ready.")
+    # Small set keeps CPU demo startup fast.
+    if len(_spam_texts) > 40:
+        _spam_texts = _spam_texts[:40]
+    print(f"Encoding {len(_spam_texts)} spam examples...", flush=True)
+    _spam_embeddings = _model.encode(_spam_texts, batch_size=8)
+    print("Ready.", flush=True)
 
 
 def check_message(message: str) -> tuple[str, str, str]:
@@ -66,7 +67,9 @@ def check_message(message: str) -> tuple[str, str, str]:
     is_scam = int(result.labels[0]) == 1
 
     if is_scam:
-        verdict = f"SCAM 🚨\nConfidence: {prob * 100:.1f}% chance this looks like spam/scam"
+        verdict = (
+            f"SCAM 🚨\nConfidence: {prob * 100:.1f}% chance this looks like spam/scam"
+        )
     else:
         safe_conf = (1.0 - prob) * 100
         verdict = f"SAFE ✅\nConfidence: {safe_conf:.1f}% chance this looks safe"
@@ -107,10 +110,16 @@ Paste an SMS (Arabic, Franco-Arabic, or English). The demo uses **your trained M
 
         gr.Examples(
             examples=[
-                ["فودافون كاش: حسابك هيتحظر. ابعت الـ PIN على http://vf-cash-secure.example"],
+                [
+                    "فودافون كاش: حسابك هيتحظر. ابعت الـ PIN على http://vf-cash-secure.example"
+                ],
                 ["VF Cash: estalamt 80g men Omar. el balance el gedeed 520g"],
-                ["Bank: Purchase of 75 EGP at Cairo Metro approved on your debit card"],
-                ["InstaPay ALERT: Verify identity at http://insta-secure.example or transfer cancels"],
+                [
+                    "Bank: Purchase of 75 EGP at Cairo Metro approved on your debit card"
+                ],
+                [
+                    "InstaPay ALERT: Verify identity at http://insta-secure.example or transfer cancels"
+                ],
             ],
             inputs=inp,
         )
@@ -120,5 +129,6 @@ Paste an SMS (Arabic, Franco-Arabic, or English). The demo uses **your trained M
 if __name__ == "__main__":
     load_artifacts()
     ui = build_ui()
-    # share=True gives a temporary public link for judges if Spaces is unavailable.
-    ui.launch(server_name="0.0.0.0", server_port=7860, share=False)
+    # Set share=True if you need a temporary public link for judges.
+    # (share tunnels can hang on some networks — local URL always works.)
+    ui.launch(server_name="127.0.0.1", server_port=7860, share=False)
