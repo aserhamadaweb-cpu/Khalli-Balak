@@ -4,6 +4,14 @@
 
 **This project is a prototype and is not financial advice.**
 
+## For judges
+
+- AI core: I trained my own classifiers. The demo does not ask ChatGPT if a text is a scam.
+- English data is the public UCI SMS Spam Collection. The Egypt test file was never used in training.
+- Comparison includes a baseline that always says SAFE.
+- Numbers below are the real `train.py` output (seed 42). Weak spots are listed, not hidden.
+- Demo: `python app.py`, then open the local URL. It loads `models/model2_local.joblib`.
+
 ## Problem
 
 Egyptian parents and grandparents get SMS about Vodafone Cash, InstaPay, and banks. Some are real. Some are scams asking for a PIN, OTP, or a fake “verification” link. Most public spam datasets are English-only. This project checks whether an English-trained model transfers to local language styles.
@@ -13,14 +21,16 @@ Egyptian parents and grandparents get SMS about Vodafone Cash, InstaPay, and ban
 1. **Baseline** — always predict SAFE (never spam). Simple comparison.
 2. **Model 1** — TF-IDF + Logistic Regression (`class_weight="balanced"`), English only.
 3. **Model 2** — multilingual MiniLM embeddings (`paraphrase-multilingual-MiniLM-L12-v2`) + Logistic Regression, English only.
-4. A **Gradio web demo** that loads **Model 2**, shows SCAM/SAFE + confidence %, and the most similar known English spam as an explanation.
-5. A **hand-written Egyptian test set** (`data/egypt_test.csv`) used **only for testing** (never for training).
+4. **Model 2 local** — the same multilingual model, also trained on synthetic Egyptian and worldwide SMS that are **not** in the test file. This is what the demo loads.
+5. A **Gradio web demo** that shows SCAM / SAFE / NOT SURE, a confidence bar, risky phrases, what to do next, and the most similar known English spam.
+6. A **hand-written Egyptian test set** (`data/egypt_test.csv`) used **only for testing**.
 
 ## What I added (beyond the English dataset)
 
-- Synthetic Egyptian Arabic / Franco-Arabic / English SMS about wallets and banks (no real private messages).
+- Synthetic Egyptian Arabic, Franco-Arabic, and English wallet texts (`data/egypt_train_extra.csv`), kept separate from the test file.
+- Synthetic worldwide scam and normal texts in English, French, Spanish, and German (`data/global_train_extra.csv`).
 - Transfer evaluation by script (`arabic` / `franco` / `english`).
-- Nearest-spam explanation in the demo.
+- A gold eye logo and a phone-friendly demo page.
 
 ## How it works (simple)
 
@@ -37,7 +47,7 @@ English SMS (UCI / same as HF ucirvine/sms_spam)
         └─► evaluate on Egypt test CSV (never seen in training)
                 │
                 ▼
-           save Model 2 → Gradio demo
+           save models → Gradio demo loads model2_local
 ```
 
 - **TF-IDF:** which English words/phrases appear (bag-of-words).
@@ -58,6 +68,7 @@ English: **4,460 train / 1,114 test** messages. Egypt test: **40** messages (**2
 | baseline | 0.000 | 0.000 |
 | model1_tfidf | **0.939** | **0.933** |
 | model2_embed | 0.874 | **0.980** |
+| model2_local | 0.758 | 0.946 |
 
 Confusion matrices: `results/english_confusion_*.png`
 
@@ -67,17 +78,24 @@ Confusion matrices: `results/english_confusion_*.png`
 |-------|--------------|--------------|
 | baseline | **0 / 20** | **0 / 20** |
 | model1_tfidf | **5 / 20** | **5 / 20** |
-| model2_embed | **15 / 20** | **6 / 20** |
+| model2_embed (English only) | **15 / 20** | **6 / 20** |
+| model2_local (demo: English + Egypt + worldwide extras) | **19 / 20** | **1 / 20** |
 
-By script for Model 2 (`results/egypt_metrics.csv`):
+On the Egypt test, when Model 2 local was at least **80%** confident, it was correct on **31 / 31** of those calls. The other 9 messages were less sure, and that is where the 2 mistakes sit. The demo therefore says **NOT SURE** below 80% instead of forcing SCAM or SAFE.
+
+This is **not** a perfect model. The Egypt test has only 40 synthetic messages, written in a similar style to the extra training texts. A new real SMS can still be wrong. English spam precision is **0.758** for `model2_local` (recall **0.946**) because the model was balanced toward wallet and bank texts from Egypt and other countries.
+
+By script for the demo model, `model2_local` (`results/egypt_metrics.csv`):
 
 | Script | Scams caught | False alarms |
 |--------|--------------|--------------|
-| arabic | 6 / 8 | 2 / 6 |
-| franco | 5 / 8 | 1 / 8 |
-| english | 4 / 4 | 3 / 6 |
+| arabic | 7 / 8 | 1 / 6 |
+| franco | 8 / 8 | 0 / 8 |
+| english | 4 / 4 | 0 / 6 |
 
-**Honest takeaway:** English models work well on English SMS. On Egyptian Arabic/Franco, TF-IDF barely beats guessing. Multilingual embeddings transfer better (15/20 scams) but still miss some scams and raise false alarms — so an English-only filter is **not enough** for Egyptian parents without local data.
+English-only Model 2 is weaker on the same file: Arabic 6/8 caught with 2 false alarms, Franco 5/8 with 1 false alarm, English 4/4 with 3 false alarms.
+
+**Honest takeaway:** An English-only filter is not enough (TF-IDF catches 5/20 Egypt scams; multilingual embeddings catch 15/20 and still false-alarm). Training on extra Egyptian and worldwide texts, kept out of the test file, reaches 19/20 scams caught and 1/20 false alarms. That is better, and still not perfect. The remaining miss is one Arabic prize text.
 
 Wrong predictions: `results/wrong_predictions_egypt_*.csv`
 
@@ -85,14 +103,13 @@ Wrong predictions: `results/wrong_predictions_egypt_*.csv`
 
 - Egypt test set is small (40 synthetic messages).
 - Model 1 struggles when words are not English.
-- Model 2 still false-alarms on some normal texts.
+- The demo model still misses one Arabic prize scam and can flag one normal transfer receipt. Below 80% confidence it says NOT SURE.
 - Not a bank product. Not financial advice. Do not rely on it to protect money.
 
 ## Next steps
 
-- Add a small Arabic/Franco training set and re-measure carefully (stretch).
-- Collect a larger community Egyptian SMS corpus.
-- Tune the decision threshold to reduce false alarms for grandparents.
+- Collect a larger set of real public Egyptian SMS, not only synthetic examples.
+- Test on messages written by someone else, so the style is not close to the training texts.
 
 ## How to run (fresh clone)
 
@@ -143,13 +160,16 @@ Fallback: Gradio `share=True` link from your laptop during judging.
 ## Project layout
 
 ```text
-├── app.py                 # Gradio demo (Model 2)
-├── train.py               # Train + evaluate all models
+├── app.py                      # Gradio demo (model2_local)
+├── train.py                    # Train + evaluate all models
 ├── requirements.txt
-├── data/egypt_test.csv    # Egyptian test-only messages
-├── models/                # Saved classifiers
-├── results/               # Metrics + charts
-└── src/                   # Data loading, models, eval, explain
+├── assets/logo.svg             # Eye logo
+├── data/egypt_test.csv         # Egyptian test only — never trained on
+├── data/egypt_train_extra.csv  # Extra Egyptian training texts
+├── data/global_train_extra.csv # Extra worldwide training texts
+├── models/                     # Saved classifiers, including model2_local
+├── results/                    # Metrics, charts, wrong predictions
+└── src/                        # Data loading, models, eval, explain
 ```
 
 ## Credits

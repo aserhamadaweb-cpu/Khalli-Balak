@@ -15,6 +15,8 @@ from src.ml_utils import stratified_train_test_split
 RANDOM_SEED = 42
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 EGYPT_TEST_PATH = PROJECT_ROOT / "data" / "egypt_test.csv"
+EGYPT_TRAIN_EXTRA_PATH = PROJECT_ROOT / "data" / "egypt_train_extra.csv"
+GLOBAL_TRAIN_EXTRA_PATH = PROJECT_ROOT / "data" / "global_train_extra.csv"
 ENGLISH_CACHE = PROJECT_ROOT / "data" / "sms_spam_english.csv"
 
 # Official UCI SMS Spam Collection (same source as Hugging Face ucirvine/sms_spam).
@@ -87,11 +89,9 @@ def load_english_sms() -> tuple[list[str], np.ndarray]:
     return texts, np.asarray(labels, dtype=int)
 
 
-def load_egypt_test(
-    path: Path | None = None,
+def _load_labeled_csv(
+    csv_path: Path,
 ) -> tuple[list[str], np.ndarray, list[str]]:
-    """Load hand-written Egyptian test set. Never used for training."""
-    csv_path = path or EGYPT_TEST_PATH
     texts: list[str] = []
     labels: list[int] = []
     scripts: list[str] = []
@@ -99,12 +99,33 @@ def load_egypt_test(
         reader = csv.DictReader(f)
         required = {"text", "label", "script"}
         if reader.fieldnames is None or required - set(reader.fieldnames):
-            raise ValueError("egypt_test.csv must have columns: text,label,script")
+            raise ValueError(f"{csv_path.name} must have columns: text,label,script")
         for row in reader:
             texts.append(row["text"])
             labels.append(int(row["label"]))
             scripts.append(row["script"].strip().lower())
     return texts, np.asarray(labels, dtype=int), scripts
+
+
+def load_egypt_test(
+    path: Path | None = None,
+) -> tuple[list[str], np.ndarray, list[str]]:
+    """Load hand-written Egyptian test set. Never used for training."""
+    return _load_labeled_csv(path or EGYPT_TEST_PATH)
+
+
+def load_egypt_train_extra(
+    path: Path | None = None,
+) -> tuple[list[str], np.ndarray, list[str]]:
+    """Extra local SMS for training only. Must not overlap the test file."""
+    return _load_labeled_csv(path or EGYPT_TRAIN_EXTRA_PATH)
+
+
+def load_global_train_extra(
+    path: Path | None = None,
+) -> tuple[list[str], np.ndarray, list[str]]:
+    """Extra worldwide SMS for training only. Must not overlap the Egypt test file."""
+    return _load_labeled_csv(path or GLOBAL_TRAIN_EXTRA_PATH)
 
 
 def english_split(

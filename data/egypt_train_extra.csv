@@ -1,0 +1,72 @@
+text,label,script
+"بنك مصر: حسابك هيتقفل بسبب تحديث. ابعت الرقم القومي والرقم السري على http://banque-misr-update.example",1,arabic
+"أورانج كاش: حد سحب 900 ج من محفظتك. عشان ترجعهم اكتب كود التحقق هنا حالاً",1,arabic
+"مبروك كسبت منحة دراسية 7000 ج. ادفع رسوم استخراج 35 ج على محفظة 01055555555",1,arabic
+"الجمارك: طردك واقف. ادفع 180 ج توصيل من الرابط http://customs-eg-pay.example عشان يتفك",1,arabic
+"هيئة الضرائب: ليك استرداد 2300 ج. سجّل بيانات البطاقة على http://tax-refund-eg.example",1,arabic
+"فوري: خطك هيتقفل خلال ساعة لو مدفعتش الغرامة. حوّل 75 ج على 01155555555",1,arabic
+"يا عم الحاج، أنا ابن جارك، العربية اتخبطت ومحتاج 2500 ج أورانج كاش دلوقتي على 01255555555",1,arabic
+"وظيفة من البيت براتب 15000. عشان التفعيل ابعت صورة البطاقة و PIN المحفظة",1,arabic
+"CIB: your card is frozen. Open http://cib-unlock-eg.example and type the PIN to reactivate",1,english
+"Orange Cash: unusual cash-out of 1600 EGP. Reply with the OTP you just received to reverse it",1,english
+"You won a Ramadan voucher of 4000 EGP. Send a 25 EGP activation fee to wallet 01088888888",1,english
+"EG-Post: parcel held at customs. Pay 95 EGP at http://egpost-release.example or it returns",1,english
+"School admin: your child's file is blocked. Transfer 600 EGP tuition hold to 01266666666 now",1,english
+"HR offer: remote job starts Monday. To verify payroll send a photo of your national ID and wallet PIN",1,english
+"Banque Misr: 7esabak hayet2efel. eb3at el raqam el qawmy 3ala http://bm-secure-eg.example",1,franco
+"Orange Cash: fe sa7b 900g mesh tabee3y. eb3at el code elly wesel delwa2ty 3ashan nerg3o",1,franco
+"Mabrook, men7a 6500g. edfa3 30g tasgeel 3ala el wallet 01077777777",1,franco
+"El gomrok: el talab wa2ef. edfa3 150g men http://gomrok-eg.example 3ashan yetla3",1,franco
+"El darayeb: leek esterdad 1900g. ekteb raqam el beta2a 3ala http://tax-eg-back.example",1,franco
+"Fawry: el khat hayet2efel law mafesh gharama. 7awel 60g le 01177777777",1,franco
+"Ya 3am, ana sahbak men el gam3a, el mobile etsara2 we me7tag 1200g Orange Cash 3ala 01277777777",1,franco
+"Sho3'l online 12000g. 3ashan el tafe3el eb3at soura el beta2a w PIN",1,franco
+"يا ماما أنا في الاستقبال ومحتاج عملية. حوّلي 1800 ج فودافون كاش على 01033333333 بسرعة",1,arabic
+"ابن خالتك اتخبط. الدكتور طالب تأمين. ابعتي 2200 ج انستاباي على 01233333333",1,arabic
+"مبروك كسبت في سحب الخط. لاستلام الجائزة ادفع رسوم 45 ج على 01122222222",1,arabic
+"Ya mama ana fel mostashfa we me7tag 1600g delwa2ty. VF Cash 3ala 01044444444",1,franco
+"Ebn 3amtek et5abat. el doctor taleb ta2min. eb3aty 2000g InstaPay 3ala 01244444444",1,franco
+"Mabrook kesebt se7b el khat. 3ashan testallem edfa3 55g fees 3ala 01144444444",1,franco
+"مبروك سحب الخط الشهري. عشان تستلم 6000 ج لازم تدفع رسوم 25 ج على 01099999999",1,arabic
+"جائزة المحفظة 3000 ج. رسوم الاستلام 20 ج اتخصم من المحفظة 01199999999",1,arabic
+"انستاباي: تحويل 900 ج إلى هدى تم بنجاح. مرجع 135790",0,arabic
+"فودافون كاش: استلمت 60 ج من علي. الرصيد الآن 400 ج",0,arabic
+"أورانج كاش: تم إيداع 320 ج من نورهان. الرصيد 2,040 ج",0,arabic
+"فوري: تم دفع فاتورة الغاز 210 ج بنجاح. رقم الإيصال 556677",0,arabic
+"البنك: مرتبك نزل 8,500 ج على الحساب الجاري",0,arabic
+"صيدلية العزبي: تم خصم 95 ج من بطاقة الخصم",0,arabic
+"يا بابا الغدا جاهز الساعة 3، تعالى وأنت راجع",0,arabic
+"الواجب بتاع الرياضة لحد بكرة، متنساش الصفحة 40",0,arabic
+"تم شحن كارت المترو بـ 50 ج من التطبيق الرسمي",0,arabic
+"تذكير: معاد التحاليل الخميس 9 الصبح في معمل المختبر",0,arabic
+"Orange Cash: 220 EGP received from Hana. Balance 1,310 EGP",0,english
+"Fawry: water bill 140 EGP paid. Receipt 778899",0,english
+"Salary of 9200 EGP was deposited to your current account",0,english
+"Pharmacy purchase 60 EGP approved on your debit card at El Ezaby",0,english
+"Mom, practice ends at 6. I'll take the bus home",0,english
+"Math homework is page 12, due Sunday. Don't forget the calculator",0,english
+"Your metro card was topped up with 30 EGP in the official app",0,english
+"Lab appointment confirmed Thursday 9am. Bring the old results",0,english
+"Orange Cash: estalamt 175g men Hana. el rasid 980g",0,franco
+"Fawry: fatoret el maya 140g etdafa3et. esal 334455",0,franco
+"El mortab nezil 8600g 3ala el 7esab",0,franco
+"El ezaby: eshtara 55g et5asmet men el beta2a",0,franco
+"Ya baba el ghada sa3a 3, ta3ala w enta rage3",0,franco
+"El wageb beta3 el math le bokra, page 18",0,franco
+"Sha7net kart el metro b 40g men el app el rasmy",0,franco
+"Me3ad el ta7alil el khamis 9 el sob7, matensaash el natiga el adima",0,franco
+"فودافون كاش: تم استلام 400 ج من ليلى. الرصيد الحالي 2,750 ج",0,arabic
+"انستاباي: تم تحويل 350 ج إلى سارة بنجاح. رقم العملية 246810",0,arabic
+"تذكير: فاتورة الكهرباء 260 ج خلال 4 أيام. ادفعها من التطبيق الرسمي فقط",0,arabic
+"البنك: تم خصم 88 ج من بطاقتك لدى كارفور اليوم",0,arabic
+"فاتورة الإنترنت 130 ج. السداد من التطبيق الرسمي قبل يوم 18",0,arabic
+"Vodafone Cash: You received 150 EGP from Mona. New balance 890 EGP",0,english
+"InstaPay: Transfer of 300 EGP to Youssef completed. Ref 135790",0,english
+"Reminder: electricity bill 210 EGP is due in 4 days. Pay only in the official app",0,english
+"Bank: Purchase of 64 EGP at Carrefour was approved on your debit card",0,english
+"Your internet bill is 125 EGP. Pay it in the official app before the 18th",0,english
+"VF Cash: estalamt 90g men Laila. el rasid el gedeed 610g",0,franco
+"InstaPay: 7awelt 250g le Sara. 3amaliya tamam. ref 864200",0,franco
+"Tazkeer: fatoret el kahraba 240g. edfa3ha men el app el rasmy bas",0,franco
+"Bank: eshtara 70g men Carrefour el naharda 3ala el beta2a",0,franco
+"Fatoret el internet 125g. el sadad men el app el rasmy abl yom 18",0,franco

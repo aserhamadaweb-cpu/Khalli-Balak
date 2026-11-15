@@ -72,6 +72,38 @@ def plot_confusion_matrix(
     plt.close(fig)
 
 
+def high_confidence_stats(
+    y_true: np.ndarray,
+    y_pred: np.ndarray,
+    probabilities: np.ndarray,
+    min_confidence: float = 0.8,
+) -> dict:
+    """How often a confident call is actually correct.
+
+    Confidence is the chance of the chosen label: max(p_spam, 1 - p_spam).
+    """
+    y_true = np.asarray(y_true, dtype=int)
+    y_pred = np.asarray(y_pred, dtype=int)
+    probabilities = np.asarray(probabilities, dtype=float)
+    confidence = np.maximum(probabilities, 1.0 - probabilities)
+    mask = confidence >= min_confidence
+    n = int(mask.sum())
+    if n == 0:
+        return {
+            "min_confidence": min_confidence,
+            "n_confident": 0,
+            "n_correct": 0,
+            "n_wrong": 0,
+        }
+    correct = int((y_true[mask] == y_pred[mask]).sum())
+    return {
+        "min_confidence": min_confidence,
+        "n_confident": n,
+        "n_correct": correct,
+        "n_wrong": n - correct,
+    }
+
+
 def egypt_script_breakdown(
     scripts: list[str], y_true: np.ndarray, y_pred: np.ndarray
 ) -> list[dict]:

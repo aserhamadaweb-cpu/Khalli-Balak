@@ -8,6 +8,19 @@ Downloaded at train time from the UCI Machine Learning Repository (same SMS Spam
 - Cached locally as `sms_spam_english.csv` after first download
 - Labels: `0` = ham (safe), `1` = spam
 
+## Worldwide training texts (`global_train_extra.csv`)
+
+- Synthetic scam and normal SMS from outside Egypt (English, French, Spanish, German).
+- Training only. Not part of the Egypt test file.
+- Repeated with the same scam/safe weights as the Egyptian extras.
+
+## Extra Egyptian training texts (`egypt_train_extra.csv`)
+
+- Separate from the test file. `train.py` refuses to run if any sentence appears in both.
+- Used only to train `model2_local`.
+- Each scam text is repeated 12 times and each safe text 40 times so the small local set is not ignored next to 4,460 English SMS.
+- Still synthetic. No real phone numbers.
+
 ## Egyptian test set (`egypt_test.csv`)
 
 - Written for this hackathon as **synthetic** examples inspired by common mobile-wallet / bank SMS patterns in Egypt.

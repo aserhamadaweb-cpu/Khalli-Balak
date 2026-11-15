@@ -1,0 +1,31 @@
+text,label,script
+"Bank alert: your debit card is locked. Confirm the PIN at http://card-secure-check.example within 1 hour",1,english
+"Tax office: you are owed a refund of 640 GBP. Enter your bank details at http://tax-refund-claim.example",1,english
+"DHL: parcel held at customs. Pay a 14 USD release fee at http://dhl-release-fee.example today",1,english
+"Apple ID used in another country. Verify the account at http://appleid-alert.example or it will be disabled",1,english
+"PayPal: unusual login. Reply with the 6-digit code we just texted you to stop a payment",1,english
+"Netflix: payment failed. Update the card at http://netflix-billing-fix.example or the account closes tonight",1,english
+"WhatsApp support: your account will be deleted. Send us the 6-digit code you just received",1,english
+"You won a 500 USD gift card. Pay a 4 USD shipping fee to wallet 5550100199 to claim it",1,english
+"Government refund pending. Call 202-000-0142 and read out your national ID number",1,english
+"FedEx could not deliver. Pay the duty now at http://fedex-duty-pay.example to reschedule",1,english
+"Crypto wallet will be frozen. Type your seed phrase at http://wallet-unlock.example to keep it",1,english
+"Mom I lost my phone, this is my new number. Please Zelle 300 USD right now",1,english
+"BNP: carte bloquee. Confirmez le code secret sur http://bnp-secure.example",1,french
+"BBVA: acceso sospechoso. Escriba su PIN en http://bbva-alerta.example ahora",1,spanish
+"Deutsche Bank: Konto gesperrt. PIN bestaetigen unter http://db-sicher.example",1,german
+"Your package was delivered to the front door. Order 112-440. No reply needed",0,english
+"Card purchase of 42.10 USD at the grocery store was approved",0,english
+"Paycheck of 2140 USD was deposited into your checking account",0,english
+"Practice ends at 6. I will take the bus home",0,english
+"Doctor visit is confirmed Tuesday at 10am. Bring your insurance card",0,english
+"Flight UA442 boards at gate B12. Have a good trip",0,english
+"Your music subscription receipt for 11.99 USD is in the official app",0,english
+"Class is cancelled tomorrow because of the storm. See you Wednesday",0,english
+"Parcel delivered at 2:14pm. Nothing else to do",0,english
+"ATM withdrawal of 60 USD was completed at the branch on Main Street",0,english
+"Dinner is at 7 at the usual place. I saved you a seat",0,english
+"Library book is due Friday. Renew it in the library app if you still need it",0,english
+"BNP: paiement de 18 EUR chez le supermarche accepte",0,french
+"BBVA: compra de 23 EUR en el supermercado aprobada",0,spanish
+"Deutsche Bank: Gehalt 1800 EUR wurde gutgeschrieben",0,german
