@@ -1,4 +1,4 @@
-# Khalli Balak — Scam texts in Egypt
+# Khalli Balak: AI that detects scam messages across languages, starting with Egyptian Arabic
 
 **Question:** Can we tell a scam SMS from a real money notice by *what it asks you to do*, not by money words alone?
 
