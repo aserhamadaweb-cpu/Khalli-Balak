@@ -8,11 +8,59 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 import numpy as np
 
+from src.intent_features import looks_like_money_message
 from src.ml_utils import confusion_counts, precision_recall_spam
 
 
 def spam_precision_recall(y_true: np.ndarray, y_pred: np.ndarray) -> dict:
     return precision_recall_spam(y_true, y_pred)
+
+
+def classification_report_row(
+    model_name: str, y_true: np.ndarray, y_pred: np.ndarray
+) -> dict:
+    metrics = precision_recall_spam(y_true, y_pred)
+    cm = confusion_counts(y_true, y_pred)
+    return {
+        "model": model_name,
+        "n_test": int(len(y_true)),
+        "accuracy": metrics["accuracy"],
+        "precision_spam": metrics["precision_spam"],
+        "recall_spam": metrics["recall_spam"],
+        "f1_spam": metrics["f1_spam"],
+        "tn": int(cm[0, 0]),
+        "fp": int(cm[0, 1]),
+        "fn": int(cm[1, 0]),
+        "tp": int(cm[1, 1]),
+    }
+
+
+def safe_money_false_positives(
+    texts: list[str],
+    y_true: np.ndarray,
+    y_pred: np.ndarray,
+    probabilities: np.ndarray,
+    scripts: list[str] | None = None,
+) -> list[dict]:
+    """SAFE texts that talk about money but were flagged SCAM."""
+    rows: list[dict] = []
+    for i, (t, yt, yp, p) in enumerate(
+        zip(texts, y_true, y_pred, probabilities, strict=True)
+    ):
+        if int(yt) != 0 or int(yp) != 1:
+            continue
+        if not looks_like_money_message(t):
+            continue
+        row = {
+            "text": t,
+            "true_label": 0,
+            "pred_label": 1,
+            "prob_spam": float(p),
+        }
+        if scripts is not None:
+            row["script"] = scripts[i]
+        rows.append(row)
+    return rows
 
 
 def write_csv(path: Path, rows: list[dict], fieldnames: list[str]) -> None:

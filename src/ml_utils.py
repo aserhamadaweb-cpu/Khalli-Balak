@@ -166,9 +166,25 @@ def precision_recall_spam(y_true: np.ndarray, y_pred: np.ndarray) -> dict[str, f
     tp = int(((y_true == 1) & (y_pred == 1)).sum())
     fp = int(((y_true == 0) & (y_pred == 1)).sum())
     fn = int(((y_true == 1) & (y_pred == 0)).sum())
+    tn = int(((y_true == 0) & (y_pred == 0)).sum())
     precision = tp / (tp + fp) if (tp + fp) else 0.0
     recall = tp / (tp + fn) if (tp + fn) else 0.0
-    return {"precision_spam": float(precision), "recall_spam": float(recall)}
+    f1 = (
+        2.0 * precision * recall / (precision + recall)
+        if (precision + recall)
+        else 0.0
+    )
+    accuracy = (tp + tn) / max(1, tp + tn + fp + fn)
+    return {
+        "accuracy": float(accuracy),
+        "precision_spam": float(precision),
+        "recall_spam": float(recall),
+        "f1_spam": float(f1),
+        "tp": tp,
+        "fp": fp,
+        "fn": fn,
+        "tn": tn,
+    }
 
 
 def confusion_counts(y_true: np.ndarray, y_pred: np.ndarray) -> np.ndarray:

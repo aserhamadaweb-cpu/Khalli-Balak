@@ -1,185 +1,150 @@
 # Khalli Balak — Scam texts in Egypt
 
-**Question:** Does a scam-SMS filter trained on English still work for Egyptian Arabic and Franco-Arabic?
+**Question:** Can we tell a scam SMS from a real money notice by *what it asks you to do*, not by money words alone?
 
 **This project is a prototype and is not financial advice.**
 
+## Live website
+
+**Try it now:** [https://khalli-balak.vercel.app](https://khalli-balak.vercel.app)
+
+Built by **ASER HAMADA**. Repo: [github.com/aserhamadaweb-cpu/Khalli-Balak](https://github.com/aserhamadaweb-cpu/Khalli-Balak)
+
 ## For judges
 
-- AI core: I trained my own classifiers. The demo does not ask ChatGPT if a text is a scam.
-- English data is the public UCI SMS Spam Collection. The Egypt test file was never used in training.
-- Comparison includes a baseline that always says SAFE.
-- Numbers below are the real `train.py` output (seed 42). Weak spots are listed, not hidden.
-- Demo: `python app.py`, then open the local URL. It loads `models/model2_local.joblib`.
+- **Demo model accuracy on Egypt test: 95%** (`model3_intent`, 38/40 correct, seed 42). Spam precision **100%**, SAFE money false positives **0**. Still misses 2 scams (shown as Not sure when confidence &lt; 75%).
+- AI core: I trained my own classifiers. The demo does **not** ask ChatGPT/Gemini if a text is a scam.
+- English data is the public UCI SMS Spam Collection. `egypt_test.csv` was **never** used in training.
+- Comparison includes a baseline that always says SAFE, older text-only models, and the new intent model.
+- Numbers below are the real `train.py` output. Weak spots are listed, not hidden.
+- Local run: `python app.py` → loads `models/model3_intent.joblib`.
 
 ## Problem
 
-Egyptian parents and grandparents get SMS about Vodafone Cash, InstaPay, and banks. Some are real. Some are scams asking for a PIN, OTP, or a fake “verification” link. Most public spam datasets are English-only. This project checks whether an English-trained model transfers to local language styles.
+Egyptian parents and grandparents get SMS about Vodafone Cash, InstaPay, and banks. Some are real notices. Some are scams that ask for a PIN, OTP, fee, or fake link. Older filters treat “money words” as suspicious. Being about money is not what makes a message a scam. **What matters is the ask.**
 
 ## What I built
 
-1. **Baseline** — always predict SAFE (never spam). Simple comparison.
+1. **Baseline** — always predict SAFE (never spam).
 2. **Model 1** — TF-IDF + Logistic Regression (`class_weight="balanced"`), English only.
-3. **Model 2** — multilingual MiniLM embeddings (`paraphrase-multilingual-MiniLM-L12-v2`) + Logistic Regression, English only.
-4. **Model 2 local** — the same multilingual model, also trained on synthetic Egyptian and worldwide SMS that are **not** in the test file. This is what the demo loads.
-5. A **Gradio web demo** that shows SCAM / SAFE / NOT SURE, a confidence bar, risky phrases, what to do next, and the most similar known English spam.
-6. A **hand-written Egyptian test set** (`data/egypt_test.csv`) used **only for testing**.
+3. **Model 2** — multilingual MiniLM embeddings + Logistic Regression, English only.
+4. **Model 2 local** — same embeddings, also trained on synthetic Egyptian + worldwide SMS (not in the test file).
+5. **Model 3 intent (demo)** — multilingual embeddings **plus intent features**, trained on UCI English SMS + self-written `hard_negatives_train.csv` (SAFE money notices and SCAM asks). Never trains on `egypt_test.csv`.
+6. A **web demo** that shows SCAM / SAFE / NOT SURE, plain-language WHY reasons, and hides “closest known scam” when the verdict is SAFE.
 
-## What I added (beyond the English dataset)
+## Intent features (what the message asks)
 
-- Synthetic Egyptian Arabic, Franco-Arabic, and English wallet texts (`data/egypt_train_extra.csv`), kept separate from the test file.
-- Synthetic worldwide scam and normal texts in English, French, Spanish, and German (`data/global_train_extra.csv`).
-- Transfer evaluation by script (`arabic` / `franco` / `english`).
-- A gold eye logo and a phone-friendly demo page.
-
-## How it works (simple)
-
-```text
-English SMS (UCI / same as HF ucirvine/sms_spam)
-        │
-        ▼
-  80/20 stratified split (seed=42)
-        │
-        ├─► train Baseline, Model 1, Model 2
-        │
-        ├─► evaluate on English holdout
-        │
-        └─► evaluate on Egypt test CSV (never seen in training)
-                │
-                ▼
-           save models → Gradio demo loads model2_local
-```
-
-- **TF-IDF:** which English words/phrases appear (bag-of-words).
-- **Embeddings:** turn a sentence into a meaning vector; the multilingual model can embed Arabic too.
-- **Logistic Regression:** learns a line that separates scam vs safe from those features (balanced class weights because spam is rarer).
-- **Baseline:** always SAFE — if a model cannot beat this on Egypt data, transfer failed.
-
-> **Implementation note:** Logistic regression and TF-IDF are implemented with NumPy/Torch (same ideas as scikit-learn). On this Windows machine, Smart App Control blocked `scipy`/`sklearn` DLLs, so the project uses a dependency set that still trains a real classifier you own.
+| Feature | Idea |
+|---------|------|
+| asks_to_share_code | Send/share OTP, PIN, password (EN / AR / Franco) |
+| warns_not_to_share | “Do not share” / متشاركش — SAFE signal for real OTP notices |
+| has_link / unofficial_link | Any link, and whether it is not an official domain |
+| urgency_or_threat | Blocked, suspended, now, هيتحظر, 3agel… |
+| prize_or_too_good | Won / gift / جايزة / mabrook… |
+| asks_to_send_money | Pay a fee / send money (not completed receipts) |
+| pure_notice | Received / approved / balance / تم استلام — no ask |
 
 ## Results (real run, seed=42)
 
-English: **4,460 train / 1,114 test** messages. Egypt test: **40** messages (**20 scam / 20 safe**), never used in `fit()`.
+English: **4,460 train / 1,114 test**. Egypt test: **40** messages (**20 scam / 20 safe**), never used in `fit()`.
 
-### English held-out test (spam class)
+### Old vs new on Egypt test only
 
-| Model | Precision (spam) | Recall (spam) |
-|-------|------------------|---------------|
+| Model | Accuracy | Precision (spam) | Recall (spam) | F1 | Confusion (TN/FP/FN/TP) |
+|-------|----------|------------------|---------------|-----|-------------------------|
+| baseline | 0.500 | 0.000 | 0.000 | 0.000 | 20 / 0 / 20 / 0 |
+| model1_tfidf | 0.500 | 0.500 | 0.250 | 0.333 | 15 / 5 / 15 / 5 |
+| model2_embed | 0.725 | 0.714 | 0.750 | 0.732 | 14 / 6 / 5 / 15 |
+| model2_local (old demo) | **0.950** | 0.950 | **0.950** | **0.950** | 19 / 1 / 1 / 19 |
+| **model3_intent (new demo)** | **0.950** | **1.000** | 0.900 | 0.947 | **20 / 0 / 2 / 18** |
+
+Files: `results/egypt_compare_old_vs_new.csv`, `results/egypt_confusion_*.png`
+
+### SAFE money false positives (the main weakness)
+
+Count of **SAFE** Egypt-test messages that talk about money/banks but were flagged **SCAM**:
+
+| Model | SAFE money false positives |
+|-------|----------------------------|
+| baseline | 0 |
+| model1_tfidf | **5** |
+| model2_embed | **5** |
+| model2_local | **1** |
+| **model3_intent** | **0** |
+
+File: `results/egypt_safe_money_fp_summary.csv`
+
+### English held-out spam (for reference)
+
+| Model | Precision | Recall |
+|-------|-----------|--------|
 | baseline | 0.000 | 0.000 |
-| model1_tfidf | **0.939** | **0.933** |
-| model2_embed | 0.874 | **0.980** |
+| model1_tfidf | 0.939 | 0.933 |
+| model2_embed | 0.874 | 0.980 |
 | model2_local | 0.758 | 0.946 |
+| model3_intent | **0.910** | **0.953** |
 
-Confusion matrices: `results/english_confusion_*.png`
+### Honest takeaway
 
-### Egyptian test set (transfer)
+- Text-only models often treat money language as scam-like (many SAFE money false alarms).
+- **Model 3 cuts SAFE money false positives on the Egypt test from 5 (English embed) / 1 (local) down to 0**, with spam precision **1.000**.
+- It still **misses 2 / 20** Egypt scams (recall 0.900): one “call and confirm your PIN” bank lure, and one Franco “dad, car broke, send VF Cash” story. Both sit under 75% confidence, so the demo says **NOT SURE** instead of SAFE.
+- Model 2 local still catches one more scam (19/20) but keeps one SAFE money false alarm. The demo ships Model 3 because the goal was intent, not keyword panic.
+- When Model 3 was ≥75% confident on Egypt, it was correct on **38 / 38** calls.
 
-| Model | Scams caught | False alarms |
-|-------|--------------|--------------|
-| baseline | **0 / 20** | **0 / 20** |
-| model1_tfidf | **5 / 20** | **5 / 20** |
-| model2_embed (English only) | **15 / 20** | **6 / 20** |
-| model2_local (demo: English + Egypt + worldwide extras) | **19 / 20** | **1 / 20** |
-
-On the Egypt test, when Model 2 local was at least **80%** confident, it was correct on **31 / 31** of those calls. The other 9 messages were less sure, and that is where the 2 mistakes sit. The demo therefore says **NOT SURE** below 80% instead of forcing SCAM or SAFE.
-
-This is **not** a perfect model. The Egypt test has only 40 synthetic messages, written in a similar style to the extra training texts. A new real SMS can still be wrong. English spam precision is **0.758** for `model2_local` (recall **0.946**) because the model was balanced toward wallet and bank texts from Egypt and other countries.
-
-By script for the demo model, `model2_local` (`results/egypt_metrics.csv`):
-
-| Script | Scams caught | False alarms |
-|--------|--------------|--------------|
-| arabic | 7 / 8 | 1 / 6 |
-| franco | 8 / 8 | 0 / 8 |
-| english | 4 / 4 | 0 / 6 |
-
-English-only Model 2 is weaker on the same file: Arabic 6/8 caught with 2 false alarms, Franco 5/8 with 1 false alarm, English 4/4 with 3 false alarms.
-
-**Honest takeaway:** An English-only filter is not enough (TF-IDF catches 5/20 Egypt scams; multilingual embeddings catch 15/20 and still false-alarm). Training on extra Egyptian and worldwide texts, kept out of the test file, reaches 19/20 scams caught and 1/20 false alarms. That is better, and still not perfect. The remaining miss is one Arabic prize text.
-
-Wrong predictions: `results/wrong_predictions_egypt_*.csv`
+Wrong predictions: `results/wrong_predictions_egypt_model3_intent.csv`
 
 ## Limitations
 
 - Egypt test set is small (40 synthetic messages).
-- Model 1 struggles when words are not English.
-- The demo model still misses one Arabic prize scam and can flag one normal transfer receipt. Below 80% confidence it says NOT SURE.
-- Not a bank product. Not financial advice. Do not rely on it to protect money.
+- Model 3 can still miss social-engineering stories that look like family chat, and “call this number and confirm your PIN” bank texts.
+- Intent rules are hand-written keyword/pattern features (EN/AR/Franco), not a second neural net.
+- Not a bank product. Not financial advice.
 
 ## Next steps
 
-- Collect a larger set of real public Egyptian SMS, not only synthetic examples.
-- Test on messages written by someone else, so the style is not close to the training texts.
+- Larger real public Egyptian SMS, written by someone else.
+- Better handling of voice-call + confirm-PIN scams and family-emergency money asks.
 
 ## How to run (fresh clone)
 
-### 1) Requirements
-
-- Python 3.10+ (3.12 recommended)
-- Internet (first run downloads the SMS dataset + MiniLM model)
-
 ```bash
 python -m venv .venv
-
-# Windows
-.venv\Scripts\activate
-
-# macOS / Linux
-source .venv/bin/activate
-
+# Windows: .venv\Scripts\activate
+# macOS/Linux: source .venv/bin/activate
 pip install -r requirements.txt
+python train.py                 # all models
+# or: python train.py --intent-only
+python app.py                   # http://127.0.0.1:7860
 ```
 
-### 2) Train + evaluate
-
-```bash
-python train.py
-```
-
-Writes:
-
-- `models/` — baseline, Model 1, Model 2, spam corpus
-- `results/` — metrics tables, confusion matrices, wrong-prediction lists
-- `data/sms_spam_english.csv` — cached English data after first download
-
-### 3) Launch the demo
-
-```bash
-python app.py
-```
-
-Open the local URL Gradio prints (usually `http://127.0.0.1:7860`).
-
-For a temporary public link for judges, set `share=True` in `app.py` → `ui.launch(...)`.
-
-### Hosting suggestion
-
-**Hugging Face Spaces** (Gradio) with `app.py`, `requirements.txt`, `src/`, and `models/`.  
-Fallback: Gradio `share=True` link from your laptop during judging.
+Online: https://khalli-balak.vercel.app
 
 ## Project layout
 
 ```text
-├── app.py                      # Gradio demo (model2_local)
-├── train.py                    # Train + evaluate all models
-├── requirements.txt
-├── assets/logo.svg             # Eye logo
-├── data/egypt_test.csv         # Egyptian test only — never trained on
-├── data/egypt_train_extra.csv  # Extra Egyptian training texts
-├── data/global_train_extra.csv # Extra worldwide training texts
-├── models/                     # Saved classifiers, including model2_local
-├── results/                    # Metrics, charts, wrong predictions
-└── src/                        # Data loading, models, eval, explain
+├── app.py                         # Demo (model3_intent)
+├── api/index.py                   # Vercel FastAPI checker
+├── public/index.html              # Public web page
+├── train.py
+├── data/egypt_test.csv            # TEST ONLY
+├── data/hard_negatives_train.csv  # Self-written SAFE money + SCAM asks
+├── data/egypt_train_extra.csv     # Used by model2_local only
+├── data/global_train_extra.csv
+├── models/model3_intent.joblib
+├── results/egypt_compare_old_vs_new.csv
+└── src/intent_features.py
 ```
 
 ## Credits
 
 - **Dataset:** UCI [SMS Spam Collection](https://archive.ics.uci.edu/dataset/228/sms+spam+collection) (same corpus as Hugging Face [`ucirvine/sms_spam`](https://huggingface.co/datasets/ucirvine/sms_spam))
+- **Hard negatives:** self-written for this hackathon (see `data/hard_negatives_train.csv`)
 - **Embedding model:** [`sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2`](https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2)
-- **Libraries:** `numpy`, `torch`, `transformers`, `matplotlib`, `gradio`, `joblib`, `huggingface_hub`, `tqdm`
+- **Libraries:** `numpy`, `torch`, `transformers`, `matplotlib`, `gradio`, `fastapi`, `joblib`, `huggingface_hub`, `tqdm`
 - **AI coding assistant:** Cursor (Composer) — helped write and organize this weekend project
 - **Hackathon:** Veritas AI International High School Hackathon (AI + Finance track)
 
 ## Honesty note
 
-Results are produced by `train.py` with seed `42` and an English stratified 80/20 split. The Egyptian file is never used in training. Failures and weak transfer are expected findings, not bugs to hide.
+Results are produced by `train.py` with seed `42`. `egypt_test.csv` is never used in training. Failures stay listed.

@@ -1,8 +1,8 @@
 """
 Khalli Balak — Gradio demo.
 
-Loads trained Model 2 (multilingual embeddings + Logistic Regression)
-and shows SCAM/SAFE, confidence %, and the most similar known English spam.
+Loads Model 3 (multilingual embeddings + intent features + Logistic Regression)
+and shows SCAM/SAFE/NOT SURE, confidence %, and plain-language WHY reasons.
 """
 
 from __future__ import annotations
@@ -15,18 +15,27 @@ import gradio as gr
 import numpy as np
 
 from src.explain import load_spam_corpus, most_similar_spam
-from src.models import EmbeddingLogRegModel
+from src.intent_features import extract_intent
+from src.models import IntentEmbeddingLogRegModel
 
 ROOT = Path(__file__).resolve().parent
-MODEL_PATH = ROOT / "models" / "model2_local.joblib"
+MODEL_PATH = ROOT / "models" / "model3_intent.joblib"
 SPAM_CORPUS_PATH = ROOT / "models" / "spam_corpus.json"
+NOT_SURE_THRESHOLD = 0.75
 
 DISCLAIMER = (
     "This project is a prototype and is not financial advice. "
     "Even a confident result can be wrong. Do not send a PIN, OTP, or money because of this tool."
 )
+GITHUB_REPO = "https://github.com/aserhamadaweb-cpu/Khalli-Balak"
+CREDIT_HTML = f"""
+<div class="kb-credit">
+  <span>Powered by <strong>ASER HAMADA</strong></span>
+  <a href="{html.escape(GITHUB_REPO)}" target="_blank" rel="noopener noreferrer">GitHub repo — view the code</a>
+</div>
+"""
 
-_model: EmbeddingLogRegModel | None = None
+_model: IntentEmbeddingLogRegModel | None = None
 _spam_texts: list[str] = []
 _spam_embeddings: np.ndarray | None = None
 
@@ -56,8 +65,8 @@ def load_artifacts() -> None:
             f"Missing {SPAM_CORPUS_PATH}. Run `python train.py` first."
         )
 
-    print("Loading Model 2...", flush=True)
-    _model = EmbeddingLogRegModel.load(MODEL_PATH)
+    print("Loading Model 3 (embeddings + intent)...", flush=True)
+    _model = IntentEmbeddingLogRegModel.load(MODEL_PATH)
     _model._ensure_encoder()
 
     print("Loading spam corpus for explanations...", flush=True)
@@ -153,11 +162,25 @@ def _advice(kind: str) -> str:
     return f'<article class="kb-advice"><h3>{title}</h3><ul>{items}</ul></article>'
 
 
-def _explain_card(neighbor: str, score: float) -> str:
-    safe_text = html.escape(neighbor)
+def _why_card(reasons: list[str], kind: str) -> str:
+    items = "".join(f"<li>{html.escape(reason)}</li>" for reason in reasons)
+    title = "Why this looks risky" if kind == "scam" else "Why this looks normal"
+    if kind == "unsure":
+        title = "Why we are not sure"
     return f"""
     <article class="kb-why">
       <p class="kb-kicker">Why this result</p>
+      <h3>{title}</h3>
+      <ul class="kb-why-list">{items}</ul>
+    </article>
+    """
+
+
+def _neighbor_card(neighbor: str, score: float) -> str:
+    safe_text = html.escape(neighbor)
+    return f"""
+    <article class="kb-why">
+      <p class="kb-kicker">Extra context</p>
       <h3>Closest known scam</h3>
       <p class="kb-quote">“{safe_text}”</p>
       <p class="kb-sim">Similarity {score:.0%}</p>
@@ -183,10 +206,11 @@ def check_message(message: str) -> tuple[str, str]:
     result = _model.predict([text])
     prob = float(result.probabilities[0])
     is_scam = prob >= 0.5
-    # Confidence of the chosen label. Below 80% we refuse a hard call.
+    # Confidence of the chosen label. Below 75% we refuse a hard call.
     confidence = prob if is_scam else (1.0 - prob)
+    intent = extract_intent(text)
 
-    if confidence < 0.80:
+    if confidence < NOT_SURE_THRESHOLD:
         lean = "SCAM" if is_scam else "SAFE"
         verdict = _card(
             "unsure",
@@ -195,6 +219,7 @@ def check_message(message: str) -> tuple[str, str]:
             f"Only {confidence * 100:.1f}% sure, and it leans {lean}. Open the official app before you act.",
             confidence * 100,
         )
+        kind = "unsure"
     elif is_scam:
         verdict = _card(
             "scam",
@@ -203,6 +228,7 @@ def check_message(message: str) -> tuple[str, str]:
             "This looks like a scam text. Do not send a PIN, OTP, or money.",
             prob * 100,
         )
+        kind = "scam"
     else:
         verdict = _card(
             "safe",
@@ -211,12 +237,6 @@ def check_message(message: str) -> tuple[str, str]:
             "This looks like an ordinary message. Still confirm inside the official app.",
             confidence * 100,
         )
-
-    if confidence < 0.80:
-        kind = "unsure"
-    elif is_scam:
-        kind = "scam"
-    else:
         kind = "safe"
 
     script = guess_script(text)
@@ -225,14 +245,19 @@ def check_message(message: str) -> tuple[str, str]:
     if not chips:
         chips = '<span class="kb-chip kb-chip-quiet">No obvious scam phrases</span>'
 
-    query_vec = _model.encode([text])[0]
-    neighbor, score = most_similar_spam(query_vec, _spam_embeddings, _spam_texts)
+    why = _why_card(intent.reasons, kind)
+    neighbor_html = ""
+    if kind == "scam":
+        query_vec = _model.encode([text])[0]
+        neighbor, score = most_similar_spam(query_vec, _spam_embeddings, _spam_texts)
+        neighbor_html = _neighbor_card(neighbor, score)
     details = f"""
     <section class="kb-extra">
       <p class="kb-script">Script guess: <strong>{html.escape(script)}</strong></p>
+      {why}
       <article class="kb-marked" dir="auto"><p class="kb-kicker">Phrases we noticed</p>{chips}<p class="kb-preview">{highlighted}</p></article>
       {_advice(kind)}
-      {_explain_card(neighbor, score)}
+      {neighbor_html}
     </section>
     """
     return verdict, details
@@ -342,6 +367,8 @@ textarea {
   font-weight: 560;
 }
 .kb-why h3 { font-size: 26px; }
+.kb-why-list { margin: 8px 0 0; padding-left: 1.15rem; line-height: 1.45; color: #2a3538; }
+.kb-why-list li { margin: 0.25rem 0; }
 .kb-kicker {
   margin: 0 0 6px;
   letter-spacing: 0.14em;
@@ -440,6 +467,24 @@ textarea {
   line-height: 1.45;
   font-family: "IBM Plex Sans Arabic", "Segoe UI", sans-serif;
 }
+.kb-credit {
+  margin-top: 14px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 18px;
+  align-items: center;
+  justify-content: space-between;
+  color: #3d4a48;
+  font-size: 14px;
+  font-family: "IBM Plex Sans Arabic", "Segoe UI", sans-serif;
+}
+.kb-credit strong { color: #143f3b; letter-spacing: 0.04em; }
+.kb-credit a {
+  color: #143f3b;
+  font-weight: 700;
+  text-decoration: none;
+  border-bottom: 1px solid #d4a24a;
+}
 @media (max-width: 700px) {
   .kb-hero { padding: 22px 18px; border-radius: 22px; }
   .kb-logo { width: 52px; height: 52px; flex-basis: 52px; }
@@ -481,6 +526,64 @@ button.kb-check, button.kb-check span { color: #f8f3ea !important; }
 .examples-table, .gallery, table.examples {
   background: transparent !important;
 }
+
+@keyframes kb-in {
+  from { opacity: 0; transform: translateY(18px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes kb-logo-in {
+  from { opacity: 0; transform: scale(0.7); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes kb-splash-out {
+  to { opacity: 0; visibility: hidden; }
+}
+.kb-splash {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  background: radial-gradient(420px 220px at 50% 42%, rgba(212, 162, 74, 0.16), transparent 62%), #0e2a28;
+  animation: kb-splash-out 0.55s ease 1.2s forwards;
+}
+.kb-splash .kb-logo {
+  width: 96px;
+  height: 96px;
+  flex-basis: 96px;
+  animation: kb-logo-in 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+.kb-splash h1 {
+  margin: 0;
+  color: #f7f1e6 !important;
+  font-family: Fraunces, Georgia, serif;
+  font-size: 44px;
+  font-weight: 560;
+  animation: kb-in 0.55s ease 0.18s both;
+}
+.kb-splash p {
+  margin: 0;
+  color: #d4a24a !important;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  font-size: 12px;
+  animation: kb-in 0.55s ease 0.28s both;
+}
+.kb-hero { animation: kb-in 0.7s ease 0.2s both; }
+.kb-panel { animation: kb-in 0.75s ease 0.35s both; }
+.kb-card, .kb-extra, .kb-why, .kb-marked, .kb-advice { animation: kb-in 0.45s ease both; }
+.kb-check { transition: transform 0.2s ease, background 0.2s ease; }
+.kb-check:hover { transform: translateY(-1px); }
+@media (prefers-reduced-motion: reduce) {
+  .kb-splash { display: none; }
+  .kb-hero, .kb-panel, .kb-card, .kb-extra, .kb-why, .kb-marked, .kb-advice, .kb-check {
+    animation: none;
+    transition: none;
+  }
+}
 """
 
 LOGO = """
@@ -514,8 +617,18 @@ THEME = gr.themes.Soft(
 )
 
 
+SPLASH = f"""
+<div class="kb-splash" aria-hidden="true">
+  {LOGO}
+  <h1>Khalli Balak</h1>
+  <p>خلي بالك</p>
+</div>
+"""
+
+
 def build_ui() -> gr.Blocks:
     with gr.Blocks(title="Khalli Balak — SMS Scam Check") as demo:
+        gr.HTML(SPLASH)
         gr.HTML(HERO)
         with gr.Column(elem_classes=["kb-panel"]):
             inp = gr.Textbox(
@@ -530,22 +643,35 @@ def build_ui() -> gr.Blocks:
             label="Try one",
             examples=[
                 ["Chase: we locked your card after a strange purchase. Enter the PIN at http://chase-unlock.example"],
-                ["UPS: a customs fee of 9 USD is due. Pay at http://ups-customs-pay.example or the box is returned"],
+                ["Your OTP is 4821 for Vodafone Cash login. Do not share it with anyone."],
+                ["You received 500 EGP via InstaPay from Ahmed."],
                 ["Congratulations, you are today's winner. Send 5 USD to receive the 1000 USD prize"],
-                ["Dad it's me on a new phone. I need 150 USD on Venmo for the train right now"],
-                ["Santander: su cuenta fue bloqueada. Confirme el PIN en http://santander-aviso.example"],
-                ["Amazon: delivered. Left with the receptionist. Order 404-221"],
-                ["Your debit card was charged 18.40 USD at a coffee shop"],
+                ["Mama, I paid the 200 for the lesson. See you later."],
+                ["Your Vodafone Cash balance is 1,200 EGP."],
+                ["Transaction of 350 EGP at Carrefour approved."],
                 ["I'll be home after football. Don't wait for dinner"],
                 ["فودافون كاش: حسابك هيتحظر. ابعت الـ PIN على http://vf-cash-secure.example"],
                 ["انستاباي: تم تحويل 500 ج إلى محمد بنجاح. رقم العملية 998877"],
+                ["رمز التحقق 8460. متشاركوش مع أي حد."],
+                ["Eb3atly el OTP elly wesel delwa2ty 3ashan afata7 el wallet."],
             ],
             inputs=inp,
         )
+        gr.HTML(CREDIT_HTML)
         gr.HTML(f'<p class="kb-foot">{html.escape(DISCLAIMER)}</p>')
 
-        btn.click(fn=check_message, inputs=inp, outputs=[verdict, similar])
-        inp.submit(fn=check_message, inputs=inp, outputs=[verdict, similar])
+        btn.click(
+            fn=check_message,
+            inputs=inp,
+            outputs=[verdict, similar],
+            show_progress="full",
+        )
+        inp.submit(
+            fn=check_message,
+            inputs=inp,
+            outputs=[verdict, similar],
+            show_progress="full",
+        )
     return demo
 
 

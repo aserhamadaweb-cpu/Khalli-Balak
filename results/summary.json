@@ -3,6 +3,8 @@
   "english_train_size": 4460,
   "english_test_size": 1114,
   "egypt_test_size": 40,
+  "hard_negatives_safe": 64,
+  "hard_negatives_scam": 36,
   "english_metrics": [
     {
       "model": "baseline",
@@ -23,108 +25,146 @@
       "recall_spam": "0.9798657718120806"
     },
     {
-      "precision_spam": 0.7580645161290323,
-      "recall_spam": 0.9463087248322147,
       "model": "model2_local",
-      "n_test": 1114
+      "n_test": "1114",
+      "precision_spam": "0.7580645161290323",
+      "recall_spam": "0.9463087248322147"
+    },
+    {
+      "model": "model3_intent",
+      "n_test": 1114,
+      "precision_spam": 0.9102564102564102,
+      "recall_spam": 0.9530201342281879
     }
   ],
   "egypt_metrics": [
     {
+      "model": "model3_intent",
+      "script": "arabic",
+      "scams_total": 8,
+      "scams_caught": 7,
+      "safe_total": 6,
+      "false_alarms": 0
+    },
+    {
+      "model": "model3_intent",
+      "script": "english",
+      "scams_total": 4,
+      "scams_caught": 4,
+      "safe_total": 6,
+      "false_alarms": 0
+    },
+    {
+      "model": "model3_intent",
+      "script": "franco",
+      "scams_total": 8,
+      "scams_caught": 7,
+      "safe_total": 8,
+      "false_alarms": 0
+    },
+    {
+      "model": "model3_intent",
+      "script": "ALL",
+      "scams_total": 20,
+      "scams_caught": 18,
+      "safe_total": 20,
+      "false_alarms": 0
+    },
+    {
       "model": "baseline",
       "script": "arabic",
-      "scams_total": "8",
-      "scams_caught": "0",
-      "safe_total": "6",
-      "false_alarms": "0"
+      "scams_total": 8,
+      "scams_caught": 0,
+      "safe_total": 6,
+      "false_alarms": 0
     },
     {
       "model": "baseline",
       "script": "english",
-      "scams_total": "4",
-      "scams_caught": "0",
-      "safe_total": "6",
-      "false_alarms": "0"
+      "scams_total": 4,
+      "scams_caught": 0,
+      "safe_total": 6,
+      "false_alarms": 0
     },
     {
       "model": "baseline",
       "script": "franco",
-      "scams_total": "8",
-      "scams_caught": "0",
-      "safe_total": "8",
-      "false_alarms": "0"
+      "scams_total": 8,
+      "scams_caught": 0,
+      "safe_total": 8,
+      "false_alarms": 0
     },
     {
       "model": "baseline",
       "script": "ALL",
-      "scams_total": "20",
-      "scams_caught": "0",
-      "safe_total": "20",
-      "false_alarms": "0"
+      "scams_total": 20,
+      "scams_caught": 0,
+      "safe_total": 20,
+      "false_alarms": 0
     },
     {
       "model": "model1_tfidf",
       "script": "arabic",
-      "scams_total": "8",
-      "scams_caught": "2",
-      "safe_total": "6",
-      "false_alarms": "1"
+      "scams_total": 8,
+      "scams_caught": 2,
+      "safe_total": 6,
+      "false_alarms": 1
     },
     {
       "model": "model1_tfidf",
       "script": "english",
-      "scams_total": "4",
-      "scams_caught": "1",
-      "safe_total": "6",
-      "false_alarms": "2"
+      "scams_total": 4,
+      "scams_caught": 1,
+      "safe_total": 6,
+      "false_alarms": 2
     },
     {
       "model": "model1_tfidf",
       "script": "franco",
-      "scams_total": "8",
-      "scams_caught": "2",
-      "safe_total": "8",
-      "false_alarms": "2"
+      "scams_total": 8,
+      "scams_caught": 2,
+      "safe_total": 8,
+      "false_alarms": 2
     },
     {
       "model": "model1_tfidf",
       "script": "ALL",
-      "scams_total": "20",
-      "scams_caught": "5",
-      "safe_total": "20",
-      "false_alarms": "5"
+      "scams_total": 20,
+      "scams_caught": 5,
+      "safe_total": 20,
+      "false_alarms": 5
     },
     {
       "model": "model2_embed",
       "script": "arabic",
-      "scams_total": "8",
-      "scams_caught": "6",
-      "safe_total": "6",
-      "false_alarms": "2"
+      "scams_total": 8,
+      "scams_caught": 6,
+      "safe_total": 6,
+      "false_alarms": 2
     },
     {
       "model": "model2_embed",
       "script": "english",
-      "scams_total": "4",
-      "scams_caught": "4",
-      "safe_total": "6",
-      "false_alarms": "3"
+      "scams_total": 4,
+      "scams_caught": 4,
+      "safe_total": 6,
+      "false_alarms": 3
     },
     {
       "model": "model2_embed",
       "script": "franco",
-      "scams_total": "8",
-      "scams_caught": "5",
-      "safe_total": "8",
-      "false_alarms": "1"
+      "scams_total": 8,
+      "scams_caught": 5,
+      "safe_total": 8,
+      "false_alarms": 1
     },
     {
       "model": "model2_embed",
       "script": "ALL",
-      "scams_total": "20",
-      "scams_caught": "15",
-      "safe_total": "20",
-      "false_alarms": "6"
+      "scams_total": 20,
+      "scams_caught": 15,
+      "safe_total": 20,
+      "false_alarms": 6
     },
     {
       "model": "model2_local",
@@ -159,11 +199,96 @@
       "false_alarms": 1
     }
   ],
+  "egypt_compare_old_vs_new": [
+    {
+      "model": "model3_intent",
+      "n_test": 40,
+      "accuracy": 0.95,
+      "precision_spam": 1.0,
+      "recall_spam": 0.9,
+      "f1_spam": 0.9473684210526316,
+      "tn": 20,
+      "fp": 0,
+      "fn": 2,
+      "tp": 18
+    },
+    {
+      "model": "baseline",
+      "n_test": 40,
+      "accuracy": 0.5,
+      "precision_spam": 0.0,
+      "recall_spam": 0.0,
+      "f1_spam": 0.0,
+      "tn": 20,
+      "fp": 0,
+      "fn": 20,
+      "tp": 0
+    },
+    {
+      "model": "model1_tfidf",
+      "n_test": 40,
+      "accuracy": 0.5,
+      "precision_spam": 0.5,
+      "recall_spam": 0.25,
+      "f1_spam": 0.3333333333333333,
+      "tn": 15,
+      "fp": 5,
+      "fn": 15,
+      "tp": 5
+    },
+    {
+      "model": "model2_embed",
+      "n_test": 40,
+      "accuracy": 0.725,
+      "precision_spam": 0.7142857142857143,
+      "recall_spam": 0.75,
+      "f1_spam": 0.7317073170731706,
+      "tn": 14,
+      "fp": 6,
+      "fn": 5,
+      "tp": 15
+    },
+    {
+      "model": "model2_local",
+      "n_test": 40,
+      "accuracy": 0.95,
+      "precision_spam": 0.95,
+      "recall_spam": 0.95,
+      "f1_spam": 0.9500000000000001,
+      "tn": 19,
+      "fp": 1,
+      "fn": 1,
+      "tp": 19
+    }
+  ],
+  "safe_money_false_positives_summary": [
+    {
+      "model": "baseline",
+      "safe_money_false_positives": 0
+    },
+    {
+      "model": "model1_tfidf",
+      "safe_money_false_positives": 5
+    },
+    {
+      "model": "model2_embed",
+      "safe_money_false_positives": 5
+    },
+    {
+      "model": "model2_local",
+      "safe_money_false_positives": 1
+    },
+    {
+      "model": "model3_intent",
+      "safe_money_false_positives": 0
+    }
+  ],
   "notes": [
     "egypt_test.csv was never used for training.",
-    "model2_local also trains on data/egypt_train_extra.csv, repeated so it is not drowned out by English SMS.",
+    "model3_intent trains on UCI English SMS + data/hard_negatives_train.csv only.",
+    "Hard-negative texts are self-written and checked for no overlap with egypt_test.csv.",
+    "Intent features: share-code, do-not-share, link/unofficial link, urgency, prize, send-money, pure notice.",
     "Baseline always predicts SAFE (not spam).",
-    "Logistic regression and TF-IDF are implemented in NumPy/Torch (same idea as scikit-learn) so the project runs on machines where Windows Smart App Control blocks scipy/sklearn DLLs.",
-    "Report numbers honestly; weak Arabic transfer is an expected finding."
+    "Report numbers honestly; remaining mistakes stay listed in wrong_predictions_*.csv."
   ]
 }

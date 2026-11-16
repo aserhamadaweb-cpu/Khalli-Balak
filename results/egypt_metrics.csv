@@ -1,4 +1,8 @@
 ﻿model,script,scams_total,scams_caught,safe_total,false_alarms
+model3_intent,arabic,8,7,6,0
+model3_intent,english,4,4,6,0
+model3_intent,franco,8,7,8,0
+model3_intent,ALL,20,18,20,0
 baseline,arabic,8,0,6,0
 baseline,english,4,0,6,0
 baseline,franco,8,0,8,0

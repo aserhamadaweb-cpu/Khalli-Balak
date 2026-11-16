@@ -1,0 +1,9 @@
+.venv
+.git
+.gradio
+__pycache__
+**/__pycache__
+results
+*.png
+data/sms_spam_english.csv
+data/*.zip

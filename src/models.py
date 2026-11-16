@@ -10,6 +10,7 @@ import numpy as np
 import torch
 from transformers import AutoModel, AutoTokenizer
 
+from src.intent_features import FEATURE_NAMES, extract_intent_matrix
 from src.ml_utils import LogisticRegressionTorch, TfidfVectorizerLite
 
 
@@ -155,5 +156,62 @@ class EmbeddingLogRegModel:
         obj = cls()
         obj.EMBED_MODEL_ID = payload["embed_model_id"]
         obj.clf = payload["clf"]
+        obj._fitted = True
+        return obj
+
+
+class IntentEmbeddingLogRegModel(EmbeddingLogRegModel):
+    """Model 3: multilingual embeddings + intent features + logistic regression.
+
+    Intent features capture *what the message asks the reader to do*
+    (share a code, pay a fee, tap a shady link) instead of only money words.
+    """
+
+    name = "model3_intent"
+    INTENT_SCALE = 4.0
+
+    def __init__(self) -> None:
+        super().__init__()
+        self.clf = LogisticRegressionTorch(class_weight="balanced", epochs=100)
+        self.feature_names = list(FEATURE_NAMES)
+
+    def _features(self, texts: list[str]) -> np.ndarray:
+        emb = self.encode(list(texts))
+        intent = extract_intent_matrix(list(texts)) * self.INTENT_SCALE
+        return np.hstack([emb, intent]).astype(np.float32)
+
+    def fit(self, texts: list[str], labels: np.ndarray) -> IntentEmbeddingLogRegModel:
+        X = self._features(texts)
+        self.clf.fit(X, labels)
+        self._fitted = True
+        return self
+
+    def predict(self, texts: list[str]) -> PredictResult:
+        if not self._fitted:
+            raise RuntimeError("Model 3 is not fitted yet.")
+        X = self._features(texts)
+        proba = self.clf.predict_proba(X)
+        return PredictResult(labels=(proba >= 0.5).astype(int), probabilities=proba)
+
+    def save(self, path) -> None:
+        joblib.dump(
+            {
+                "type": "intent_embed_lr",
+                "embed_model_id": self.EMBED_MODEL_ID,
+                "clf": self.clf,
+                "feature_names": self.feature_names,
+                "intent_scale": self.INTENT_SCALE,
+            },
+            path,
+        )
+
+    @classmethod
+    def load(cls, path) -> IntentEmbeddingLogRegModel:
+        payload = joblib.load(path)
+        obj = cls()
+        obj.EMBED_MODEL_ID = payload["embed_model_id"]
+        obj.clf = payload["clf"]
+        obj.feature_names = list(payload.get("feature_names", FEATURE_NAMES))
+        obj.INTENT_SCALE = float(payload.get("intent_scale", cls.INTENT_SCALE))
         obj._fitted = True
         return obj

@@ -21,6 +21,13 @@ Downloaded at train time from the UCI Machine Learning Repository (same SMS Spam
 - Each scam text is repeated 12 times and each safe text 40 times so the small local set is not ignored next to 4,460 English SMS.
 - Still synthetic. No real phone numbers.
 
+## Hard negatives (`hard_negatives_train.csv`)
+
+- Self-written SAFE money notices (~60) and SCAM asks (~30) in English, Egyptian Arabic, and Franco-Arabic.
+- Goal: teach the model that money words alone are not a scam — the *ask* matters (share a code, pay a fee, tap a shady link).
+- Used only to train `model3_intent` (with the UCI English set). Repeated so they are not drowned out.
+- Checked for no overlap with `egypt_test.csv`. Still synthetic. No real phone numbers.
+
 ## Egyptian test set (`egypt_test.csv`)
 
 - Written for this hackathon as **synthetic** examples inspired by common mobile-wallet / bank SMS patterns in Egypt.

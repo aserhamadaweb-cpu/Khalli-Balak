@@ -1,0 +1,12 @@
+﻿model,text,true_label,pred_label,prob_spam,script
+model1_tfidf,"فودافون كاش: تم استلام 250 ج من أحمد. الرصيد الحالي 1,140 ج",0,1,0.5749290585517883,arabic
+model1_tfidf,Vodafone Cash: You received 100 EGP from Sara. New balance 640 EGP,0,1,0.8827677965164185,english
+model1_tfidf,Reminder: your mobile bill is 90 EGP. Pay in the official app before the 20th,0,1,0.6026356816291809,english
+model1_tfidf,VF Cash: estalamt 80g men Omar. el balance el gedeed 520g,0,1,0.5623011589050293,franco
+model1_tfidf,InstaPay: 7awelt 150g le Nour. 3amaliya tamam. ref 112233,0,1,0.5609376430511475,franco
+model2_embed,انستاباي: تم تحويل 500 ج إلى محمد بنجاح. رقم العملية 998877,0,1,0.555724561214447,arabic
+model2_embed,البنك: تم خصم 120 ج من بطاقتك لدى سوبر ماركت العبور بتاريخ اليوم,0,1,0.7070193886756897,arabic
+model2_embed,Vodafone Cash: You received 100 EGP from Sara. New balance 640 EGP,0,1,0.9422087669372559,english
+model2_embed,Bank: Purchase of 75 EGP at Cairo Metro approved on your debit card,0,1,0.6102009415626526,english
+model2_embed,Reminder: your mobile bill is 90 EGP. Pay in the official app before the 20th,0,1,0.9107183814048767,english
+model2_local,انستاباي: تم تحويل 500 ج إلى محمد بنجاح. رقم العملية 998877,0,1,0.6525502800941467,arabic

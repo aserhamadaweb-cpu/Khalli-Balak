@@ -17,6 +17,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 EGYPT_TEST_PATH = PROJECT_ROOT / "data" / "egypt_test.csv"
 EGYPT_TRAIN_EXTRA_PATH = PROJECT_ROOT / "data" / "egypt_train_extra.csv"
 GLOBAL_TRAIN_EXTRA_PATH = PROJECT_ROOT / "data" / "global_train_extra.csv"
+HARD_NEGATIVES_PATH = PROJECT_ROOT / "data" / "hard_negatives_train.csv"
 ENGLISH_CACHE = PROJECT_ROOT / "data" / "sms_spam_english.csv"
 
 # Official UCI SMS Spam Collection (same source as Hugging Face ucirvine/sms_spam).
@@ -126,6 +127,13 @@ def load_global_train_extra(
 ) -> tuple[list[str], np.ndarray, list[str]]:
     """Extra worldwide SMS for training only. Must not overlap the Egypt test file."""
     return _load_labeled_csv(path or GLOBAL_TRAIN_EXTRA_PATH)
+
+
+def load_hard_negatives(
+    path: Path | None = None,
+) -> tuple[list[str], np.ndarray, list[str]]:
+    """Self-written SAFE money notices + SCAM asks. Training only; never egypt_test."""
+    return _load_labeled_csv(path or HARD_NEGATIVES_PATH)
 
 
 def english_split(

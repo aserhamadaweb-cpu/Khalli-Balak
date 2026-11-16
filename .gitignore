@@ -6,6 +6,9 @@ env/
 # Gradio local cache
 .gradio/
 
+# Vercel local link
+.vercel/
+
 # Python
 __pycache__/
 *.py[cod]

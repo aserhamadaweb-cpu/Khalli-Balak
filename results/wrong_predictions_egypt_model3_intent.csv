@@ -1,0 +1,3 @@
+﻿text,true_label,pred_label,prob_spam,script
+البنك الأهلي: تم رصد دخول مشبوه على حسابك. اتصل فوراً على 01200000000 وأكد الرقم السري عشان نوقف العملية,1,0,0.43298736214637756,arabic
+"Ya baba el 3arabeya 3atalet, eb3atly 1500g Vodafone Cash 3ala 01222222222 3ashan el wrsha",1,0,0.37140223383903503,franco
